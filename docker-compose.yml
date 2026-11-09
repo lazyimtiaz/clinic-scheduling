@@ -1,0 +1,62 @@
+services:
+    app:
+        image: dunglas/frankenphp:latest-php8.3-alpine
+        container_name: curapoint_app
+        restart: unless-stopped
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./:/app
+        environment:
+            SERVER_NAME: ":8000"
+            APP_ENV: local
+            APP_DEBUG: "true"
+            DB_CONNECTION: mysql
+            DB_HOST: db
+            DB_PORT: 3306
+            DB_DATABASE: clinic_scheduling
+            DB_USERNAME: root
+            DB_PASSWORD: secret_password
+            REDIS_HOST: redis
+            QUEUE_CONNECTION: redis
+        depends_on:
+            - db
+            - redis
+
+    queue:
+        image: dunglas/frankenphp:latest-php8.3-alpine
+        container_name: curapoint_queue
+        restart: unless-stopped
+        volumes:
+            - ./:/app
+        command: php artisan queue:work --tries=3
+        environment:
+            DB_CONNECTION: mysql
+            DB_HOST: db
+            REDIS_HOST: redis
+            QUEUE_CONNECTION: redis
+        depends_on:
+            - db
+            - redis
+
+    db:
+        image: mysql:8.0
+        container_name: curapoint_db
+        restart: unless-stopped
+        ports:
+            - "3307:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: secret_password
+            MYSQL_DATABASE: clinic_scheduling
+        volumes:
+            - db_data:/var/lib/mysql
+
+    redis:
+        image: redis:alpine
+        container_name: curapoint_redis
+        restart: unless-stopped
+        ports:
+            - "6379:6379"
+
+volumes:
+    db_data:
