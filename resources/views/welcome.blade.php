@@ -16,52 +16,28 @@
 <!-- Top System Bar -->
 <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-        <div class="flex items-center space-x-6">
-            <div class="flex items-center space-x-2.5">
-                <div class="w-7 h-7 bg-clinical-900 rounded-md flex items-center justify-center text-white font-bold text-xs">
-                    +
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="font-bold text-sm text-slate-900 tracking-tight">CuraPoint</span>
-                    <span class="text-[11px] font-medium text-slate-400 border-l border-slate-200 pl-2">Clinical OS</span>
-                </div>
+        <div class="flex items-center space-x-2.5">
+            <div class="w-7 h-7 bg-clinical-900 rounded-md flex items-center justify-center text-white font-bold text-xs">
+                +
             </div>
-
-
-            {{-- Portal Switcher Navigation --}}
-            @php $view = request('view', 'booking'); @endphp
-            <nav class="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200/70 text-xs">
-                <a href="{{ url('/') }}" class="px-3 py-1 rounded-md font-medium transition {{ $view === 'booking' ? 'bg-white text-slate-900 font-semibold shadow-subtle' : 'text-slate-600 hover:text-slate-900' }}">
-                    Patient Booking
-                </a>
-                <a href="{{ url('/?view=reception') }}" class="px-3 py-1 rounded-md font-medium transition {{ $view === 'reception' ? 'bg-white text-slate-900 font-semibold shadow-subtle' : 'text-slate-600 hover:text-slate-900' }}">
-                    Reception Triage
-                </a>
-                <a href="{{ url('/?view=doctor') }}" class="px-3 py-1 rounded-md font-medium transition {{ $view === 'doctor' ? 'bg-white text-slate-900 font-semibold shadow-subtle' : 'text-slate-600 hover:text-slate-900' }}">
-                    Doctor Console
-                </a>
-            </nav>
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-sm text-slate-900 tracking-tight">CuraPoint</span>
+                <span class="text-[11px] font-medium text-slate-400 border-l border-slate-200 pl-2">Clinical OS</span>
+            </div>
         </div>
 
-        <div class="flex items-center gap-4">
-            <div class="flex items-center gap-2 text-xs text-slate-500">
-                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                <span class="font-mono text-[11px] text-slate-500">Livewire 3 &bull; Locking Active</span>
-            </div>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('login') }}" class="h-8 px-3 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white transition flex items-center gap-1.5 shadow-subtle">
+                <span>Clinical Portal Sign In</span>
+                <span class="font-mono text-slate-400">&rarr;</span>
+            </a>
         </div>
     </div>
 </header>
 
-
-<!-- Main Workspace -->
+<!-- Public Booking Desk -->
 <main class="flex-1 py-6">
-    @if (request('view') === 'doctor')
-        <livewire:doctor-schedule-console />
-    @elseif (request('view') === 'reception')
-        <livewire:receptionist-triage-console />
-    @else
-        <livewire:book-appointment />
-    @endif
+    <livewire:book-appointment />
 </main>
 
 <!-- System Footer -->

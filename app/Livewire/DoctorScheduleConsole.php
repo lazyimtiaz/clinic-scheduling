@@ -35,14 +35,19 @@ class DoctorScheduleConsole extends Component
 
     public function mount(): void
     {
-        $firstDoctor = Doctor::where('is_active', true)->first();
-        if ($firstDoctor) {
-            $this->selectedDoctorId = $firstDoctor->id;
+        $user = auth()->user();
+
+        if ($user && $user->isDoctor()) {
+            // Find doctor record linked to this user
+            $doctor = Doctor::where('user_id', $user->id)->first();
+            $this->selectedDoctorId = $doctor?->id;
+        } else {
+            $firstDoctor = Doctor::where('is_active', true)->first();
+            $this->selectedDoctorId = $firstDoctor?->id;
         }
 
         $this->selectedDate = Carbon::today()->toDateString();
     }
-
     public function selectDate(string $date): void
     {
         $this->selectedDate = $date;
